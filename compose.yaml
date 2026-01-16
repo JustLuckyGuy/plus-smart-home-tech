@@ -33,3 +33,14 @@ services:
                              --partitions 1 --replication-factor 1 --if-not-exists \
                              --bootstrap-server kafka:29092'"
     init: true
+
+#  telemetry-service:
+#    build:
+#      context: ./telemetry/collector
+#      dockerfile: Dockerfile
+#    image: telemetry-service-project
+#    container_name: psht-telemetry
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      SPRING_KAFKA_BOOTSTRAP_SERVERS: "kafka:29092"
