@@ -1,4 +1,4 @@
-package ru.yandex.practicum.telemetry.kafka_client.deserializator;
+package main.avro.deserializator;
 
 import org.apache.avro.io.BinaryDecoder;
 import org.apache.avro.io.DatumReader;
