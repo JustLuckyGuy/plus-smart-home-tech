@@ -5,6 +5,8 @@ grpc:
       enableKeepAlive: true
       keepAliveWithoutCalls: true
       negotiationType: plaintext
+  server:
+    port: 59090
 sensor:
   motionSensors:
     - id: "motion-1"
