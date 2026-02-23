@@ -30,7 +30,7 @@ public class ScenarioActionProducer {
                 log.info("Нет ответа от хаба");
             }
         } catch (RuntimeException e) {
-            log.info("Поймали ошибку отправки в хаброутер {}", e.getMessage());
+            log.info("Поймали ошибку отправки в хаброутер {}", e.getMessage(), e);
         }
     }
 }

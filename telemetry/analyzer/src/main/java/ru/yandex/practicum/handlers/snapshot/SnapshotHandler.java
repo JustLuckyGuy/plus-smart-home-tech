@@ -13,6 +13,7 @@ import ru.yandex.practicum.repository.ScenarioRepository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @Component
@@ -28,12 +29,12 @@ public class SnapshotHandler {
         List<Scenario> scenarios = scenarioRepository.findByHubId(snapshotAvro.getHubId());
         scenarios.stream()
                 .filter(scenario -> handleScenario(scenario, sensorStateAvroMap))
-                .forEach(scenario -> sendScenarioActions(scenario));
+                .forEach(this::sendScenarioActions);
     }
 
     private Boolean handleScenario(Scenario scenario, Map<String, SensorStateAvro> sensorStateAvroMap) {
         List<Condition> conditions = conditionRepository.findAllByScenario(scenario);
-        return conditions.stream().noneMatch(condition -> !handleCondition(condition, sensorStateAvroMap));
+        return conditions.stream().allMatch(condition -> handleCondition(condition, sensorStateAvroMap));
     }
 
     private Boolean handleCondition(Condition condition, Map<String, SensorStateAvro> sensorStateAvroMap) {
@@ -79,7 +80,7 @@ public class SnapshotHandler {
         Integer targetValue = condition.getValue();
         switch (operationAvro) {
             case EQUALS -> {
-                return currentValue == targetValue;
+                return Objects.equals(currentValue, targetValue);
             }
             case LOWER_THAN -> {
                 return currentValue < targetValue;
