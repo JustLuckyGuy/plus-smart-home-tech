@@ -34,6 +34,21 @@ services:
                              --bootstrap-server kafka:29092'"
     init: true
 
+  db:
+    image: postgres:16.1
+    container_name: smart-home-db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=analyzer
+      - POSTGRES_USER=kirya
+      - POSTGRES_PASSWORD=12345
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10
+
 #  telemetry-service:
 #    build:
 #      context: ./telemetry/collector
