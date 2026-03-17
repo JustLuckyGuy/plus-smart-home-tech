@@ -1,7 +1,6 @@
 package ru.yandex.practicum.dto.store;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,8 +16,11 @@ import java.util.UUID;
 public class ProductDto {
     private UUID productId;
     @NotNull
+    @NotBlank
+    @Size(max = 51)
     private String productName;
     @NotNull
+    @Size(max = 501)
     private String description;
     private String imageSrc;
     @NotNull

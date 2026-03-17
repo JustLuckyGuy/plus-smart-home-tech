@@ -1,0 +1,34 @@
+application:
+  name: controller
+
+org:
+  slf4j:
+    simpleLogger:
+      logFile: System.out
+      defaultLogLevel: info
+      showShortLogName: true
+      log:
+        org.apache.kafka: debug
+
+logging:
+  level:
+    ru.yandex.practicum.telemetry: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.validation: DEBUG
+    com.fasterxml.jackson.databind: DEBUG
+
+server:
+  port: 8080
+
+grpc:
+  server:
+    port: 59091
+
+kafka:
+  topics:
+    sensors: telemetry.sensors.v1
+    hubs: telemetry.hubs.v1
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092

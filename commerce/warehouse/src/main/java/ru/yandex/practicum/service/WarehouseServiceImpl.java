@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.yandex.practicum.api.ShoppingStoreOperations;
 import ru.yandex.practicum.dto.cart.ShoppingCartDto;
-import ru.yandex.practicum.dto.store.ProductDto;
-import ru.yandex.practicum.dto.store.QuantityState;
 import ru.yandex.practicum.dto.warehouse.AddProductToWarehouseRequest;
 import ru.yandex.practicum.dto.warehouse.AddressDto;
 import ru.yandex.practicum.dto.warehouse.BookedProductsDto;
@@ -35,7 +32,6 @@ public class WarehouseServiceImpl implements WarehouseService {
     private final WarehouseRepository repository;
     private final WarehouseMapper mapper;
     private final AddressDto warehouseAddress = initAddress();
-    private final ShoppingStoreOperations client;
 
     @Override
     public void newProductInWarehouse(NewProductInWarehouseRequest request) {
@@ -88,15 +84,6 @@ public class WarehouseServiceImpl implements WarehouseService {
         Integer newQuantity = oldQuantity + request.getQuantity();
         product.setQuantity(newQuantity);
         repository.save(product);
-
-        ProductDto productDto;
-        try {
-            productDto = client.getProduct(product.getProductId());
-            QuantityState state = QuantityState.fromQuantity(newQuantity);
-            client.setProductQuantityState(product.getProductId(), state);
-        } catch (RuntimeException e) {
-            log.info("Такого товара нет в магазине");
-        }
     }
 
     @Override

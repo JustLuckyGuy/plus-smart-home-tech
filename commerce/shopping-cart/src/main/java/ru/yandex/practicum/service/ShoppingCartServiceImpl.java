@@ -73,8 +73,6 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         for (UUID id : products) {
             if (oldProducts.containsKey(id)) {
                 oldProducts.remove(id);
-            } else {
-                throw new NoProductsInShoppingCartException("Не удалось найти продукт в корзине");
             }
         }
         cart.setProducts(oldProducts);
@@ -111,7 +109,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
     }
 
     private ShoppingCart getOrCreateShoppingCart(String username) {
-        return cartRepository.findByUsername(username).orElseGet(() -> {
+        return cartRepository.findByUsernameAndActiveTrue(username).orElseGet(() -> {
             log.debug("Создается новая корзина для пользователя {}", username);
             ShoppingCart newCart = new ShoppingCart();
             newCart.setUsername(username);

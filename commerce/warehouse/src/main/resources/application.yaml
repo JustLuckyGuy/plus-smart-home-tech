@@ -20,7 +20,7 @@ eureka:
 
 logging:
   level:
-    ru.yandex.practicum: TRACE
+    ru.yandex.practicum: INFO
     org:
       springframework: ERROR
       apache.kafka: ERROR

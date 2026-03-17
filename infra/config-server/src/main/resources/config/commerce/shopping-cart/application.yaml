@@ -42,5 +42,4 @@ resilience4j:
   timelimiter:
     instances:
       warehouse:
-        # Таймаут на выполнение всей операции (должен быть больше feign readTimeout)
         timeoutDuration: 5s
