@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.yandex.practicum.api.WarehouseOperations;
+import ru.yandex.practicum.client.WarehouseClient;
 import ru.yandex.practicum.dto.cart.ChangeProductQuantityRequest;
 import ru.yandex.practicum.dto.cart.ShoppingCartDto;
 import ru.yandex.practicum.dto.warehouse.BookedProductsDto;
@@ -26,7 +26,7 @@ import java.util.UUID;
 public class ShoppingCartServiceImpl implements ShoppingCartService {
     private final ShoppingCartRepository cartRepository;
     private final ShoppingCartMapper cartMapper;
-    private final WarehouseOperations warehouseOperations;
+    private final WarehouseClient warehouseOperations;
 
     @Transactional(readOnly = true)
     @Override
@@ -48,7 +48,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         oldProducts.putAll(products);
         cart.setProducts(oldProducts);
 
-        BookedProductsDto bookedProductsDto = warehouseOperations.checkProductQuantityEnoughForShoppingCart(cartMapper.toCartDto(cart));
+        BookedProductsDto bookedProductsDto = warehouseOperations.checkProductQuantity(cartMapper.toCartDto(cart));
         log.info("Проверили наличие товаров на складе, параметры заказа: {}", bookedProductsDto);
         cartRepository.save(cart);
         return cartMapper.toCartDto(cart);
@@ -98,7 +98,8 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         cart.setProducts(oldProducts);
         log.info("Было измененно количество продукта в корзине пользователя {}", username);
 
-        BookedProductsDto bookedProductsDto = warehouseOperations.checkProductQuantityEnoughForShoppingCart(cartMapper.toCartDto(cart));
+        BookedProductsDto bookedProductsDto = warehouseOperations.checkProductQuantity(cartMapper.toCartDto(cart));
+        log.info("Проверили наличие товаров на складе: {}", bookedProductsDto);
         cartRepository.save(cart);
         return cartMapper.toCartDto(cart);
     }
