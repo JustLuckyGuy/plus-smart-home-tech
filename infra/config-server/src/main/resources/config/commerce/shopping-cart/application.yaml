@@ -1,0 +1,45 @@
+server:
+  port: 0
+
+spring:
+  application:
+    name: shopping-cart
+  sql:
+    init:
+      mode: always
+  datasource:
+    driverClassName: "org.postgresql.Driver"
+    url: "jdbc:postgresql://localhost:5432/analyzer"
+    username: "kirya"
+    password: "12345"
+  jpa:
+    hibernate:
+      ddl-auto: none
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        default_schema: cart
+        format_sql: true
+        show_sql: true
+
+feign:
+  client:
+    config:
+      warehouse:
+        connectTimeout: 2000
+        readTimeout: 3000
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      warehouse:
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 30000
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+  timelimiter:
+    instances:
+      warehouse:
+        timeoutDuration: 5s

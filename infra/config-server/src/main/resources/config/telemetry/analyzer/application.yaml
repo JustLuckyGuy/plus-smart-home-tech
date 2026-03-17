@@ -1,0 +1,41 @@
+application:
+  name: analyzer
+
+grpc:
+  client:
+    hub-router:
+      address: 'static://127.0.0.1:59090'
+      enableKeepAlive: true
+      keepAliveWithoutCalls: true
+      negotiationType: plaintext
+
+kafka:
+  topics:
+    snapshots: "telemetry.snapshots.v1"
+    hubs: "telemetry.hubs.v1"
+  hub-consumer-properties:
+    group-id: analyzer-hub-group
+  snapshort-consumer-properties:
+    group-id: analyzer-snapshot-group
+
+spring:
+  datasource:
+    driverClassName: "org.postgresql.Driver"
+    url: "jdbc:postgresql://localhost:5432/analyzer"
+    username: "kirya"
+    password: "12345"
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  sql:
+    init:
+      mode: always
+  kafka:
+    bootstrap-servers: localhost:9092

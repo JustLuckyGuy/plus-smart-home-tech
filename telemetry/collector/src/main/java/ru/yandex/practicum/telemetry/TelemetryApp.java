@@ -2,9 +2,10 @@ package ru.yandex.practicum.telemetry;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 
-@SpringBootApplication(scanBasePackages = "ru.yandex.practicum.telemetry.kafka_producer," +
-        "ru.yandex.practicum.telemetry.collector,")
+@SpringBootApplication
+@ConfigurationPropertiesScan
 public class TelemetryApp {
     public static void main(String[] args) {
         SpringApplication.run(TelemetryApp.class, args);
