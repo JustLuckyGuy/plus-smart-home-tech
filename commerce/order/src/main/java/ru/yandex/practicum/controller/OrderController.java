@@ -88,7 +88,7 @@ public class OrderController implements OrderOperations {
 
     @Override
     public OrderDto createNewOrder(CreateNewOrderRequest request) {
-        log.info("Пришел запрос на создание нового заказа ", request.getShoppingCartDto());
+        log.info("Пришел запрос на создание нового заказа {}", request.getShoppingCartDto());
         return service.createNewOrder(request);
     }
 }

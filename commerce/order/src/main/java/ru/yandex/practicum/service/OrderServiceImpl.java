@@ -64,7 +64,7 @@ public class OrderServiceImpl implements OrderService {
             } else if (e.status() == 404) {
                 throw new NoSpecifiedProductInWarehouseException(e.getMessage());
             } else {
-                throw new RuntimeException(e.getMessage());
+                throw e;
             }
         }
 
@@ -75,7 +75,7 @@ public class OrderServiceImpl implements OrderService {
             if (e.status() == 400) {
                 throw new NoCartException(e.getMessage());
             } else {
-                throw new RuntimeException(e.getMessage());
+                throw e;
             }
         }
         Order newOrder = orderMapper.toOrder(request, bookedProductsDto, username);

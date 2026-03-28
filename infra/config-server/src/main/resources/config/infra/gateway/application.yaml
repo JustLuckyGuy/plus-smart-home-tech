@@ -3,10 +3,10 @@ server:
 
 logging:
   level:
-    org.springframework.cloud.gateway: TRACE
-    org.springframework.cloud.netflix.eureka: TRACE
-    reactor.netty: TRACE
-    org.springframework.web: TRACE
+    org.springframework.cloud.gateway: DEBUG
+    org.springframework.cloud.netflix.eureka: DEBUG
+    reactor.netty: DEBUG
+    org.springframework.web: DEBUG
 
 resilience4j:
   circuitbreaker:

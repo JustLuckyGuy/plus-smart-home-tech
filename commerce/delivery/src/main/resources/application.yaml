@@ -29,3 +29,12 @@ logging:
     org:
       springframework: ERROR
       apache.kafka: ERROR
+
+decimal:
+  baseRate: 5.0
+  warehouse1AddressMultiplier: 1
+  warehouse2AddressMultiplier: 2
+  fragileMultiplier: 0.2
+  weightMultiplier: 0.3
+  volumeMultiplier: 0.2
+  streetMultiplier: 0.2

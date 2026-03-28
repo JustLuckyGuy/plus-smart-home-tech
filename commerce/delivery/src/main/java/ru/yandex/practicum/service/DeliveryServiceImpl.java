@@ -2,6 +2,7 @@ package ru.yandex.practicum.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.yandex.practicum.api.OrderOperations;
@@ -29,13 +30,26 @@ public class DeliveryServiceImpl implements DeliveryService {
     private final WarehouseOperations warehouseClient;
     private final OrderOperations orderClient;
 
-    private static final BigDecimal BASE_RATE = BigDecimal.valueOf(5.0);
-    private static final BigDecimal WAREHOUSE_1_ADDRESS_MULTIPLIER = BigDecimal.valueOf(1);
-    private static final BigDecimal WAREHOUSE_2_ADDRESS_MULTIPLIER = BigDecimal.valueOf(2);
-    private static final BigDecimal FRAGILE_MULTIPLIER = BigDecimal.valueOf(0.2);
-    private static final BigDecimal WEIGHT_MULTIPLIER = BigDecimal.valueOf(0.3);
-    private static final BigDecimal VOLUME_MULTIPLIER = BigDecimal.valueOf(0.2);
-    private static final BigDecimal STREET_MULTIPLIER = BigDecimal.valueOf(0.2);
+    @Value("${decimal.baseRate}")
+    private BigDecimal baseRate;
+
+    @Value("${decimal.warehouse1AddressMultiplier}")
+    private BigDecimal warehouse1AddressMultiplier;
+
+    @Value("${decimal.warehouse2AddressMultiplier}")
+    private BigDecimal warehouse2AddressMultiplier;
+
+    @Value("${decimal.fragileMultiplier}")
+    private BigDecimal fragileMultiplier;
+
+    @Value("${decimal.weightMultiplier}")
+    private BigDecimal weightMultiplier;
+
+    @Value("${decimal.volumeMultiplier}")
+    private BigDecimal volumeMultiplier;
+
+    @Value("${decimal.streetMultiplier}")
+    private BigDecimal streetMultiplier;
 
     @Override
     public DeliveryDto requestDelivery(DeliveryDto deliveryDto) {
@@ -52,19 +66,19 @@ public class DeliveryServiceImpl implements DeliveryService {
                 () -> new NoDeliveryFoundException("Не найдено досавки #" + orderDto.getDeliveryId() + " с заказом #" + orderDto.getOrderId()));
         Address warehouseAddress = delivery.getFromAddress();
         Address destinationAddress = delivery.getToAddress();
-        BigDecimal totalCost = BASE_RATE;
+        BigDecimal totalCost = baseRate;
         if (warehouseAddress.getCity().equals("ADDRESS_1")) {
-            totalCost = totalCost.add(totalCost.multiply(WAREHOUSE_1_ADDRESS_MULTIPLIER));
+            totalCost = totalCost.add(totalCost.multiply(warehouse1AddressMultiplier));
         } else {
-            totalCost = totalCost.add(totalCost.multiply(WAREHOUSE_2_ADDRESS_MULTIPLIER));
+            totalCost = totalCost.add(totalCost.multiply(warehouse2AddressMultiplier));
         }
         if (orderDto.getFragile()) {
-            totalCost = totalCost.multiply(FRAGILE_MULTIPLIER);
+            totalCost = totalCost.multiply(fragileMultiplier);
         }
-        totalCost = totalCost.add(BigDecimal.valueOf(orderDto.getDeliveryVolume()).multiply(VOLUME_MULTIPLIER));
-        totalCost = totalCost.add(BigDecimal.valueOf(orderDto.getDeliveryWeight()).multiply(WEIGHT_MULTIPLIER));
+        totalCost = totalCost.add(BigDecimal.valueOf(orderDto.getDeliveryVolume()).multiply(volumeMultiplier));
+        totalCost = totalCost.add(BigDecimal.valueOf(orderDto.getDeliveryWeight()).multiply(weightMultiplier));
         if (!warehouseAddress.getStreet().equals(destinationAddress.getStreet())) {
-            totalCost = totalCost.add(totalCost.multiply(STREET_MULTIPLIER));
+            totalCost = totalCost.add(totalCost.multiply(streetMultiplier));
         }
 
         log.info("Готовая стоимость доставки = {}", totalCost);
@@ -84,7 +98,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
     @Override
     public void deliverySuccessful(UUID orderId) {
-        log.info("Заказ #{} успешно доставлен");
+        log.info("Заказ #{} успешно доставлен", orderId);
         Delivery delivery = findDelivery(orderId);
         delivery.setDeliveryState(DeliveryState.DELIVERED);
         deliveryRepository.save(delivery);
