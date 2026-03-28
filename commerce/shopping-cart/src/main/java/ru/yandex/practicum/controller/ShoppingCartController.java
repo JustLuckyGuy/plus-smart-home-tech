@@ -29,6 +29,11 @@ public class ShoppingCartController implements ShoppingCartOperations {
     }
 
     @Override
+    public String getUsernameById(UUID cartId) {
+        return shoppingCartService.getUsernameById(cartId);
+    }
+
+    @Override
     public ShoppingCartDto removeFromShoppingCart(String username, List<UUID> products) {
         ShoppingCartDto response = shoppingCartService.removeFromShoppingCart(username, products);
         log.info("Пользователь {} удалил из корзины продукты: {}", username, products);

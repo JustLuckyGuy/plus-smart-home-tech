@@ -9,6 +9,7 @@ import ru.yandex.practicum.dto.cart.ChangeProductQuantityRequest;
 import ru.yandex.practicum.dto.cart.ShoppingCartDto;
 import ru.yandex.practicum.dto.warehouse.BookedProductsDto;
 import ru.yandex.practicum.exception.DeactivateCartException;
+import ru.yandex.practicum.exception.NoCartException;
 import ru.yandex.practicum.exception.NoProductsInShoppingCartException;
 import ru.yandex.practicum.exception.NotAuthorizedUserException;
 import ru.yandex.practicum.mapper.ShoppingCartMapper;
@@ -100,6 +101,13 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         log.info("Проверили наличие товаров на складе: {}", bookedProductsDto);
         cartRepository.save(cart);
         return cartMapper.toCartDto(cart);
+    }
+
+    @Override
+    public String getUsernameById(UUID cartId) {
+        ShoppingCart shoppingCart = cartRepository.findByCartId(cartId)
+                .orElseThrow(() -> new NoCartException("Корзина с таким ID не существует: {}" + cartId));
+        return shoppingCart.getUsername();
     }
 
     private void validationUsername(String username) {

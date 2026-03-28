@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @RestControllerAdvice
 public class ErrorHandler {
-    @ExceptionHandler({ProductNotFoundException.class})
+    @ExceptionHandler({ProductNotFoundException.class, NoSpecifiedProductInWarehouseException.class,
+            NoDeliveryFoundException.class, NoOrderFoundException.class, NoPaymentFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiError handleNotFoundException(RuntimeException e) {
         log.warn("404: NOT_FOUND {}", e.getMessage());
@@ -17,7 +18,7 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler({NoProductsInShoppingCartException.class, SpecifiedProductAlreadyInWarehouseException.class,
-            ProductInShoppingCartLowQuantityInWarehouse.class, NoSpecifiedProductInWarehouseException.class})
+            ProductInShoppingCartLowQuantityInWarehouse.class, NoCartException.class, NotEnoughInfoOrderException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiError handleBadRequestException(RuntimeException e) {
         log.warn("400: BAD_REQUEST {}", e.getMessage());
