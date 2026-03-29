@@ -16,6 +16,9 @@ public interface ShoppingCartOperations {
     @GetMapping
     ShoppingCartDto getShoppingCart(@RequestParam(name = "username") @NotNull String username);
 
+    @GetMapping("/name")
+    String getUsernameById(@RequestParam @NotNull UUID cartId);
+
     @PostMapping("/remove")
     ShoppingCartDto removeFromShoppingCart(@RequestParam(name = "username") @NotNull String username, @RequestBody List<UUID> products);
 

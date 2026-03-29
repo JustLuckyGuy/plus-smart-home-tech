@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.yandex.practicum.api.WarehouseOperations;
 import ru.yandex.practicum.dto.cart.ShoppingCartDto;
-import ru.yandex.practicum.dto.warehouse.AddProductToWarehouseRequest;
-import ru.yandex.practicum.dto.warehouse.AddressDto;
-import ru.yandex.practicum.dto.warehouse.BookedProductsDto;
-import ru.yandex.practicum.dto.warehouse.NewProductInWarehouseRequest;
+import ru.yandex.practicum.dto.warehouse.*;
 import ru.yandex.practicum.service.WarehouseService;
+
+import java.util.Map;
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -37,6 +37,24 @@ public class WarehouseController implements WarehouseOperations {
     public void addProductToWarehouse(AddProductToWarehouseRequest request) {
         log.info("Пришел запрос принять продукт на склад");
         service.addProductToWarehouse(request);
+    }
+
+    @Override
+    public BookedProductsDto assemblyProductsForOrder(AssemblyProductsForOrderRequest request) {
+        log.info("Запрос на сборку товара для заказа{}", request.getOrderId());
+        return service.assemblyProductsForOrder(request);
+    }
+
+    @Override
+    public void shippedToDelivery(ShippedToDeliveryRequest request) {
+        log.info("Запрос на передачу в доставку");
+        service.shippedToDelivery(request);
+    }
+
+    @Override
+    public void returnProduct(Map<UUID, Integer> productsToReturn) {
+        log.info("Запрос на возвран товара");
+        service.acceptReturn(productsToReturn);
     }
 
     @Override
